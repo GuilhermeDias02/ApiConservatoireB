@@ -22,15 +22,18 @@ public class Classe {
     @Column(nullable = false)
     private String libelle;
 
+    @Column(nullable = true)
+    private String description;
+
     @OneToMany
     @Column(nullable = true)
     private List<Eleve> eleves;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = false)
     private Instrument instrument;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Niveau niveau;
 }

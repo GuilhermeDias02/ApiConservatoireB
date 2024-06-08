@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class payement {
+public class Payement {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
@@ -26,6 +26,6 @@ public class payement {
     private Date date;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Eleve eleve;
 }

@@ -24,18 +24,18 @@ public class Cours {
     private String salle;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private Utilisateur prof;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private Classe classe;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private Heure heure;
 
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private Jour jour;
 }

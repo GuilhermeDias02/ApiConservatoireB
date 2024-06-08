@@ -35,6 +35,6 @@ public class Eleve {
     private boolean demande_inscription;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Utilisateur utilisateur;
 }
