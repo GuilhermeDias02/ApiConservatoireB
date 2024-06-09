@@ -37,4 +37,13 @@ public class Eleve {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Utilisateur utilisateur;
+
+    public Eleve(String nom, String prenom, Date date_naissance, boolean soi_meme, boolean demande_inscription, Utilisateur utilisateur){
+        this.mom = nom;
+        this.prenom = prenom;
+        this.date_naissance = date_naissance;
+        this.soi_meme = soi_meme;
+        this.demande_inscription = demande_inscription;
+        this.utilisateur = utilisateur;
+    }
 }

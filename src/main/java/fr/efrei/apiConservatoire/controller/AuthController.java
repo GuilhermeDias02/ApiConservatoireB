@@ -6,6 +6,7 @@ import fr.efrei.apiConservatoire.dto.RegisterDTO;
 import fr.efrei.apiConservatoire.model.Utilisateur;
 import fr.efrei.apiConservatoire.security.JwtService;
 import fr.efrei.apiConservatoire.service.AuthService;
+import fr.efrei.apiConservatoire.service.EleveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
