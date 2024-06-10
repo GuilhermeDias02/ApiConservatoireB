@@ -1,9 +1,11 @@
 package fr.efrei.apiConservatoire.service;
 
 import fr.efrei.apiConservatoire.dto.CreateEleve;
+import fr.efrei.apiConservatoire.dto.UpdateEleve;
 import fr.efrei.apiConservatoire.model.Eleve;
 import fr.efrei.apiConservatoire.model.Utilisateur;
 import fr.efrei.apiConservatoire.repository.EleveRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +25,12 @@ public class EleveService {
         return repository.findAll();
     }
 
-    public Optional<Eleve> findAllEleveByUtilisateur(Utilisateur utilisateur){
+    public List<Eleve> findAllEleveByUtilisateur(Utilisateur utilisateur){
         return repository.findAllByUtilisateur(utilisateur);
     }
 
-    public Optional<Eleve> findEleveByUuid(String uuid){
-        return repository.findOneByUuid(uuid);
+    public Eleve findEleveByUuid(String uuid){
+        return repository.findOneByUuid(uuid).orElse(null);
     }
 
     public Eleve createEleve(CreateEleve eleve){
@@ -44,5 +46,48 @@ public class EleveService {
         return repository.save(eleveACreer);
     }
 
+    @Transactional
+    public boolean deleteEleve(String uuid){
+        Eleve eleveASupp = findEleveByUuid(uuid);
 
+        if(eleveASupp != null){
+            repository.deleteByUuid(uuid);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateEleve(String uuid, UpdateEleve eleve){
+        Eleve eleveAMaj = findEleveByUuid(uuid);
+
+        if(eleveAMaj != null){
+            eleveAMaj.setSoi_meme(eleve.isSoi_meme());
+            eleveAMaj.setDemande_inscription(eleve.isDemande_inscription());
+            repository.save(eleveAMaj);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateSoiMemeEleve(String uuid, UpdateEleve eleve){
+        Eleve eleveAMaj = findEleveByUuid(uuid);
+
+        if(eleveAMaj != null){
+            eleveAMaj.setSoi_meme(eleve.isSoi_meme());
+            repository.save(eleveAMaj);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateDemandeinscriptionEleve(String uuid, UpdateEleve eleve){
+        Eleve eleveAMaj = findEleveByUuid(uuid);
+
+        if(eleveAMaj != null){
+            eleveAMaj.setDemande_inscription(eleve.isDemande_inscription());
+            repository.save(eleveAMaj);
+            return true;
+        }
+        return false;
+    }
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface EleveRepository extends JpaRepository<Eleve, String> {
     List<Eleve> findAll();
 
-    Optional<Eleve> findAllByUtilisateur(Utilisateur utilisateur);
+    List<Eleve> findAllByUtilisateur(Utilisateur utilisateur);
 
     Optional<Eleve> findOneByUuid(String uuid);
 
