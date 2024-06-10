@@ -36,4 +36,12 @@ public class Classe {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Niveau niveau;
+
+    public Classe(String libelle, String description, List<Eleve> eleves, Instrument instrument, Niveau niveau){
+        this.libelle = libelle;
+        this.description = description;
+        this.eleves = eleves;
+        this.instrument = instrument;
+        this.niveau = niveau;
+    }
 }

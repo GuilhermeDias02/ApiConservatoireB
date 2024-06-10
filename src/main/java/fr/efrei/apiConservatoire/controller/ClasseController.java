@@ -2,6 +2,7 @@ package fr.efrei.apiConservatoire.controller;
 
 import fr.efrei.apiConservatoire.dto.CreateEleve;
 import fr.efrei.apiConservatoire.dto.UpdateEleve;
+import fr.efrei.apiConservatoire.model.Classe;
 import fr.efrei.apiConservatoire.model.Eleve;
 import fr.efrei.apiConservatoire.model.Utilisateur;
 import fr.efrei.apiConservatoire.service.ClasseService;
@@ -21,14 +22,14 @@ public class ClasseController {
     private final ClasseService service;
 //    private final UtilisateurService utilisateurService;
 
-    public EleveController (ClasseService service/*, UtilisateurService utilisateurService*/){
+    public ClasseController (ClasseService service/*, UtilisateurService utilisateurService*/){
         this.service = service;
 //        this.utilisateurService = utilisateurService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Eleve>> getAllClasses(){
-        return new ResponseEntity<>(service.findAllEleves(), HttpStatus.OK);
+    public ResponseEntity<List<Classe>> getAllClasses(){
+        return new ResponseEntity<>(service.findAllClasses(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('Admin')")
