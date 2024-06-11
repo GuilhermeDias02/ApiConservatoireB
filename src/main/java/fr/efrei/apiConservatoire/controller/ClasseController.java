@@ -1,10 +1,9 @@
 package fr.efrei.apiConservatoire.controller;
 
-import fr.efrei.apiConservatoire.dto.CreateEleve;
+import fr.efrei.apiConservatoire.dto.CreateClasse;
+import fr.efrei.apiConservatoire.dto.UpdateClasse;
 import fr.efrei.apiConservatoire.dto.UpdateEleve;
 import fr.efrei.apiConservatoire.model.Classe;
-import fr.efrei.apiConservatoire.model.Eleve;
-import fr.efrei.apiConservatoire.model.Utilisateur;
 import fr.efrei.apiConservatoire.service.ClasseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,45 +26,43 @@ public class ClasseController {
 //        this.utilisateurService = utilisateurService;
     }
 
+    // tout le monde peut voir les possibilités d'inscription sur le site mais en front faut filtrer pour pas que tout le monde ait accès à par exemple les élèves déjà inscrits
+    // TODO: dto viewClasse qui ne donne ques les infos nécessaires aux utilisateurs, ex liste eleves null
     @GetMapping
     public ResponseEntity<List<Classe>> getAllClasses(){
         return new ResponseEntity<>(service.findAllClasses(), HttpStatus.OK);
     }
 
+    // on pourra récupérer des infos supplémentaires sur une classe précise ex les eleves inscrits
     @PreAuthorize("hasRole('Admin')")
     @GetMapping("/one/{uuid}")
-    public ResponseEntity<Eleve> getEleve(@PathVariable String uuid){
-        Eleve eleve = service.findEleveByUuid(uuid);
+    public ResponseEntity<Classe> getClasse(@PathVariable String uuid){
+        Classe classe = service.findClasseByUuid(uuid);
 
-        if(eleve != null){
-            return new ResponseEntity<>(service.findEleveByUuid(uuid), HttpStatus.OK);
+        if(classe != null){
+            return new ResponseEntity<>(service.findClasseByUuid(uuid), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorize("hasRole('Admin') or hasRole('Prof') or hasRole('Parent')")
-    @GetMapping("/utilisateur/{uuid}")
-    public ResponseEntity<List<Eleve>> getElevesUtilisateur(@PathVariable String uuid){
-        Utilisateur utilisateur = utilisateurService.findUtilisateurByUuid(uuid);
-
-        if (utilisateur != null){
-            List<Eleve> elevesUtilisateur = service.findAllEleveByUtilisateur(utilisateur);
-            return new ResponseEntity<>(elevesUtilisateur, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // avec la barre de recherche on peut filtrer un certain nombre de classes qui aurait un niveau ou instrument dans le nom de la classe
+    @GetMapping("/libelle/{libelle}")
+    public ResponseEntity<List<Classe>> getClasseLibelleLike(@PathVariable String libelle){
+        return new ResponseEntity<>(service.findAllClasseByLibelleLike(libelle), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('Admin') or hasRole('Prof') or hasRole('Parent')")
+    // on ne peut creer une nouvelle classe que si on est un admin via un menu special
+    @PreAuthorize("hasRole('Admin')")
     @PostMapping
-    public ResponseEntity<Eleve> postEleve(@Valid @RequestBody CreateEleve eleve){
-        Eleve eleveACreer = service.createEleve(eleve);
-        return new ResponseEntity<>(eleveACreer, HttpStatus.CREATED);
+    public ResponseEntity<Classe> postClasse(@Valid @RequestBody CreateClasse classe){
+        Classe classeACreer = service.createClasse(classe);
+        return new ResponseEntity<>(classeACreer, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{uuid}")
     public ResponseEntity<?> deleteEleve(@PathVariable String uuid){
-        boolean isDeleted = service.deleteEleve(uuid);
+        boolean isDeleted = service.deleteClasse(uuid);
         if(isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -74,8 +71,8 @@ public class ClasseController {
 
     @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{uuid}")
-    public ResponseEntity<?> putEleve(@PathVariable String uuid, @Valid @RequestBody UpdateEleve eleve){
-        boolean isUpdated = service.updateEleve(uuid, eleve);
+    public ResponseEntity<?> putEleve(@PathVariable String uuid, @Valid @RequestBody UpdateClasse classe){
+        boolean isUpdated = service.updateClasse(uuid, classe);
         if(isUpdated) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -83,19 +80,34 @@ public class ClasseController {
     }
 
     // c'est des bool donc je pourrais prendre un
-    @PreAuthorize("hasRole('Admin') or hasRole('Parent') or hasRole('Prof')")
+    @PreAuthorize("hasRole('Admin')")
     @PatchMapping("/{uuid}/{ressource}")
-    public ResponseEntity<?> patchEleve(
+    public ResponseEntity<?> patchClasse(
             @PathVariable String uuid,
             @PathVariable String ressource,
-            @Valid @RequestBody UpdateEleve eleve) {
+            @Valid @RequestBody UpdateClasse classe) {
         boolean isUpdated = false;
-        if(ressource.equals("soi_meme")){
-            isUpdated = service.updateSoiMemeEleve(uuid, eleve);
+        if(ressource.equals("description")){
+            isUpdated = service.updateDescriptionClasse(uuid, classe);
         }
-        else if(ressource.equals("demande_inscription")){
-            isUpdated = service.updateDemandeinscriptionEleve(uuid, eleve);
+//        else if(ressource.equals("")){
+//            isUpdated = service.updateDemandeinscriptionEleve(uuid, eleve);
+//        }
+
+        if(isUpdated) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorize("hasRole('Admin') or hasRole('Parent') or hasRole('Prof')")
+    @PatchMapping("/{uuid}/{ressource}")
+    public ResponseEntity<?> patchElevesClasse(
+            @PathVariable String uuid,
+            @PathVariable String ressource,
+            @Valid @RequestBody UpdateClasse classe) {
+        boolean isUpdated = false;
+        isUpdated = service.updateElevesClasse(uuid, classe);
 
         if(isUpdated) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

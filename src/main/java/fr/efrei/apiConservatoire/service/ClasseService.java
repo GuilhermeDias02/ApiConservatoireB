@@ -65,31 +65,34 @@ public class ClasseService {
         Classe classeAMaj = findClasseByUuid(uuid);
 
         if(classeAMaj != null){
-            classeAMaj.setSoi_meme(eleve.isSoi_meme());
-            classeAMaj.setDemande_inscription(eleve.isDemande_inscription());
+            classeAMaj.setLibelle(classe.getLibelle());
+            classeAMaj.setDescription(classe.getDescription());
+            classeAMaj.setEleves(classe.getEleves());
+            classeAMaj.setInstrument(classe.getInstrument());
+            classeAMaj.setNiveau(classe.getNiveau());
             repository.save(classeAMaj);
             return true;
         }
         return false;
     }
 
-    public boolean updateSoiMemeEleve(String uuid, UpdateEleve eleve){
-        Eleve eleveAMaj = findEleveByUuid(uuid);
+    public boolean updateElevesClasse(String uuid, UpdateClasse classe){
+        Classe classeAMaj = findClasseByUuid(uuid);
 
-        if(eleveAMaj != null){
-            eleveAMaj.setSoi_meme(eleve.isSoi_meme());
-            repository.save(eleveAMaj);
+        if(classeAMaj != null && classeAMaj.getEleves() != null){
+             classeAMaj.setEleves(classe.getEleves());
+            repository.save(classeAMaj);
             return true;
         }
         return false;
     }
 
-    public boolean updateDemandeinscriptionEleve(String uuid, UpdateEleve eleve){
-        Eleve eleveAMaj = findEleveByUuid(uuid);
+    public boolean updateDescriptionClasse(String uuid, UpdateClasse classe){
+        Classe classeAMaj = findClasseByUuid(uuid);
 
-        if(eleveAMaj != null){
-            eleveAMaj.setDemande_inscription(eleve.isDemande_inscription());
-            repository.save(eleveAMaj);
+        if(classeAMaj != null && classeAMaj.getDescription() != null){
+            classeAMaj.setDescription(classe.getDescription());
+            repository.save(classeAMaj);
             return true;
         }
         return false;
