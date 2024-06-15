@@ -1,8 +1,7 @@
 package fr.efrei.apiConservatoire.controller;
 
-import fr.efrei.apiConservatoire.dto.CreateClasse;
-import fr.efrei.apiConservatoire.dto.UpdateClasse;
-import fr.efrei.apiConservatoire.model.Classe;
+import fr.efrei.apiConservatoire.dto.CreateCours;
+import fr.efrei.apiConservatoire.dto.UpdateCours;
 import fr.efrei.apiConservatoire.model.Cours;
 import fr.efrei.apiConservatoire.service.CoursService;
 import jakarta.validation.Valid;
@@ -24,41 +23,40 @@ public class CoursController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @GetMapping
-    public ResponseEntity<List<Cours>> getAllClasses(){
+    public ResponseEntity<List<Cours>> getAllCours(){
         return new ResponseEntity<>(service.findAllCours(), HttpStatus.OK);
     }
 
-    // on pourra récupérer des infos supplémentaires sur une classe précise ex les eleves inscrits
     @PreAuthorize("hasRole('Admin')")
     @GetMapping("/one/{uuid}")
-    public ResponseEntity<Classe> getClasse(@PathVariable String uuid){
-        Classe classe = service.findClasseByUuid(uuid);
+    public ResponseEntity<Cours> getClasse(@PathVariable String uuid){
+        Cours cours = service.findCoursByUuid(uuid);
 
-        if(classe != null){
-            return new ResponseEntity<>(service.findClasseByUuid(uuid), HttpStatus.OK);
+        if(cours != null){
+            return new ResponseEntity<>(service.findCoursByUuid(uuid), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // avec la barre de recherche on peut filtrer un certain nombre de classes qui aurait un niveau ou instrument dans le nom de la classe
-    @GetMapping("/libelle/{libelle}")
-    public ResponseEntity<List<Classe>> getClasseLibelleLike(@PathVariable String libelle){
-        return new ResponseEntity<>(service.findAllClasseByLibelleLike(libelle), HttpStatus.OK);
-    }
+    // TODO: recuperer tous les cours d'un eleve et d'un prof
+//    @GetMapping("/libelle/{libelle}")
+//    public ResponseEntity<List<Cours>> getClasseLibelleLike(@PathVariable String libelle){
+//        return new ResponseEntity<>(service.findAllClasseByLibelleLike(libelle), HttpStatus.OK);
+//    }
 
-    // on ne peut creer une nouvelle classe que si on est un admin via un menu special
     @PreAuthorize("hasRole('Admin')")
     @PostMapping
-    public ResponseEntity<Classe> postClasse(@Valid @RequestBody CreateClasse classe){
-        Classe classeACreer = service.createClasse(classe);
-        return new ResponseEntity<>(classeACreer, HttpStatus.CREATED);
+    public ResponseEntity<Cours> postCours(@Valid @RequestBody CreateCours cours){
+        Cours coursACreer = service.createCours(cours);
+        return new ResponseEntity<>(coursACreer, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<?> deleteEleve(@PathVariable String uuid){
-        boolean isDeleted = service.deleteClasse(uuid);
+    public ResponseEntity<?> deleteCours(@PathVariable String uuid){
+        boolean isDeleted = service.deleteCours(uuid);
         if(isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -67,47 +65,46 @@ public class CoursController {
 
     @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{uuid}")
-    public ResponseEntity<?> putEleve(@PathVariable String uuid, @Valid @RequestBody UpdateClasse classe){
-        boolean isUpdated = service.updateClasse(uuid, classe);
+    public ResponseEntity<?> putEleve(@PathVariable String uuid, @Valid @RequestBody UpdateCours cours){
+        boolean isUpdated = service.updateCours(uuid, cours);
         if(isUpdated) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // c'est des bool donc je pourrais prendre un
     @PreAuthorize("hasRole('Admin')")
     @PatchMapping("/{uuid}/{ressource}")
-    public ResponseEntity<?> patchClasse(
+    public ResponseEntity<?> patchCours(
             @PathVariable String uuid,
             @PathVariable String ressource,
-            @Valid @RequestBody UpdateClasse classe) {
+            @Valid @RequestBody UpdateCours cours) {
         boolean isUpdated = false;
-        if(ressource.equals("description")){
-            isUpdated = service.updateDescriptionClasse(uuid, classe);
+        if(ressource.equals("salle")){
+            isUpdated = service.updateSalleCours(uuid, cours);
         }
-//        else if(ressource.equals("")){
-//            isUpdated = service.updateDemandeinscriptionEleve(uuid, eleve);
+        else if(ressource.equals("prof")){
+            isUpdated = service.updateProfCours(uuid, cours);
+        }
+
+        if(isUpdated) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+//    @PreAuthorize("hasRole('Admin')")
+//    @PatchMapping("/{uuid}/{ressource}")
+//    public ResponseEntity<?> patchElevesClasse(
+//            @PathVariable String uuid,
+//            @PathVariable String ressource,
+//            @Valid @RequestBody UpdateClasse classe) {
+//        boolean isUpdated = false;
+//        isUpdated = service.updateElevesClasse(uuid, classe);
+//
+//        if(isUpdated) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 //        }
-
-        if(isUpdated) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PreAuthorize("hasRole('Admin') or hasRole('Parent') or hasRole('Prof')")
-    @PatchMapping("/{uuid}/{ressource}")
-    public ResponseEntity<?> patchElevesClasse(
-            @PathVariable String uuid,
-            @PathVariable String ressource,
-            @Valid @RequestBody UpdateClasse classe) {
-        boolean isUpdated = false;
-        isUpdated = service.updateElevesClasse(uuid, classe);
-
-        if(isUpdated) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
 }

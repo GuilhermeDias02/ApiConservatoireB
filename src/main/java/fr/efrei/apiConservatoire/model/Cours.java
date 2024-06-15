@@ -38,4 +38,13 @@ public class Cours {
     @ManyToOne
     @JoinColumn(nullable = true)
     private Jour jour;
+
+    public Cours(String libelle, String salle, Utilisateur prof, Classe classe, Heure heure, Jour jour){
+        this.libelle = libelle;
+        this.salle = salle;
+        this.prof = prof;
+        this.classe = classe;
+        this.heure = heure;
+        this.jour = jour;
+    }
 }

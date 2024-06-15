@@ -1,5 +1,7 @@
 package fr.efrei.apiConservatoire.service;
 
+import fr.efrei.apiConservatoire.dto.CreateCours;
+import fr.efrei.apiConservatoire.dto.UpdateCours;
 import fr.efrei.apiConservatoire.model.Cours;
 import fr.efrei.apiConservatoire.model.Instrument;
 import fr.efrei.apiConservatoire.repository.CoursRepository;
@@ -16,7 +18,7 @@ public class CoursService {
         this.repository = repository;
     }
 
-    public List<Cours> findAllClasses(){
+    public List<Cours> findAllCours(){
         return repository.findAll();
     }
 
@@ -24,61 +26,63 @@ public class CoursService {
         return repository.findOneByUuid(uuid).orElse(null);
     }
 
-    public Cours createClasse(CreateCours classe){
+    public Cours createCours(CreateCours cours){
         Cours coursACreer = new Cours(
-                classe.getLibelle(),
-                classe.getDescription(),
-                classe.getEleves(),
-                classe.getInstrument(),
-                classe.getNiveau()
+                cours.getLibelle(),
+                cours.getSalle(),
+                cours.getProf(),
+                cours.getClasse(),
+                cours.getHeure(),
+                cours.getJour()
         );
 
-        return repository.save(classeACreer);
+        return repository.save(coursACreer);
     }
 
     @Transactional
-    public boolean deleteClasse(String uuid){
-        Classe classeASupp = findClasseByUuid(uuid);
+    public boolean deleteCours(String uuid){
+        Cours coursASupp = findCoursByUuid(uuid);
 
-        if(classeASupp != null){
+        if(coursASupp != null){
             repository.deleteByUuid(uuid);
             return true;
         }
         return false;
     }
 
-    public boolean updateClasse(String uuid, UpdateClasse classe){
-        Classe classeAMaj = findClasseByUuid(uuid);
+    public boolean updateCours(String uuid, UpdateCours cours){
+        Cours coursAMaj = findCoursByUuid(uuid);
 
-        if(classeAMaj != null){
-            classeAMaj.setLibelle(classe.getLibelle());
-            classeAMaj.setDescription(classe.getDescription());
-            classeAMaj.setEleves(classe.getEleves());
-            classeAMaj.setInstrument(classe.getInstrument());
-            classeAMaj.setNiveau(classe.getNiveau());
-            repository.save(classeAMaj);
+        if(coursAMaj != null){
+            coursAMaj.setLibelle(cours.getLibelle());
+            coursAMaj.setSalle(cours.getSalle());
+            coursAMaj.setProf(cours.getProf());
+            coursAMaj.setClasse(cours.getClasse());
+            coursAMaj.setHeure(cours.getHeure());
+            coursAMaj.setJour(cours.getJour());
+            repository.save(coursAMaj);
             return true;
         }
         return false;
     }
 
-    public boolean updateElevesClasse(String uuid, UpdateClasse classe){
-        Classe classeAMaj = findClasseByUuid(uuid);
+    public boolean updateSalleCours(String uuid, UpdateCours cours){
+        Cours coursAMaj = findCoursByUuid(uuid);
 
-        if(classeAMaj != null && classeAMaj.getEleves() != null){
-            classeAMaj.setEleves(classe.getEleves());
-            repository.save(classeAMaj);
+        if(coursAMaj != null && coursAMaj.getSalle() != null){
+            coursAMaj.setSalle(cours.getSalle());
+            repository.save(coursAMaj);
             return true;
         }
         return false;
     }
 
-    public boolean updateDescriptionClasse(String uuid, UpdateClasse classe){
-        Classe classeAMaj = findClasseByUuid(uuid);
+    public boolean updateProfCours(String uuid, UpdateCours cours){
+        Cours coursAMaj = findCoursByUuid(uuid);
 
-        if(classeAMaj != null && classeAMaj.getDescription() != null){
-            classeAMaj.setDescription(classe.getDescription());
-            repository.save(classeAMaj);
+        if(coursAMaj != null && coursAMaj.getProf() != null){
+            coursAMaj.setProf(cours.getProf());
+            repository.save(coursAMaj);
             return true;
         }
         return false;
