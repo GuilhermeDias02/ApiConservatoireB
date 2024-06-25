@@ -21,9 +21,8 @@ public class ClasseController {
     private final ClasseService service;
 //    private final UtilisateurService utilisateurService;
 
-    public ClasseController (ClasseService service/*, UtilisateurService utilisateurService*/){
+    public ClasseController (ClasseService service){
         this.service = service;
-//        this.utilisateurService = utilisateurService;
     }
 
     // tout le monde peut voir les possibilités d'inscription sur le site mais en front faut filtrer pour pas que tout le monde ait accès à par exemple les élèves déjà inscrits
@@ -101,10 +100,9 @@ public class ClasseController {
     }
 
     @PreAuthorize("hasRole('Admin') or hasRole('Parent') or hasRole('Prof')")
-    @PatchMapping("/{uuid}/{ressource}")
+    @PatchMapping("/{uuid}")
     public ResponseEntity<?> patchElevesClasse(
             @PathVariable String uuid,
-            @PathVariable String ressource,
             @Valid @RequestBody UpdateClasse classe) {
         boolean isUpdated = false;
         isUpdated = service.updateElevesClasse(uuid, classe);

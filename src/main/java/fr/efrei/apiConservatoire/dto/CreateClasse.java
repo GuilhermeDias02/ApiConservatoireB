@@ -4,13 +4,15 @@ import fr.efrei.apiConservatoire.model.Eleve;
 import fr.efrei.apiConservatoire.model.Instrument;
 import fr.efrei.apiConservatoire.model.Niveau;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class CreateClasse {
     @NotBlank
     private String libelle;

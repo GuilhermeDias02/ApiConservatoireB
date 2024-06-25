@@ -31,10 +31,13 @@ public class AuthService {
     public Utilisateur signup(RegisterDTO input) {
         Utilisateur user = new Utilisateur();
         user.setNom(input.getNom());
+        user.setPrenom(input.getPrenom());
         user.setTelephone(input.getTelephone());
+        user.setAdresse(input.getAdresse());
         user.setEmail(input.getEmail());
         user.setRole(Role.Parent);
         user.setMdp(passwordEncoder.encode(input.getMdp()));
+        user.setDescription_prof(null);
 
         return userRepository.save(user);
     }

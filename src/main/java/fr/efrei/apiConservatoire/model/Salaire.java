@@ -24,4 +24,8 @@ public class Salaire {
 
     @Column(nullable = true)
     private Date date;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Utilisateur prof;
 }

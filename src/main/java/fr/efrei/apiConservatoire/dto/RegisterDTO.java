@@ -1,16 +1,29 @@
 package fr.efrei.apiConservatoire.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegisterDTO {
-    private String email;
-
-    private String mdp;
-
+    @NotBlank
     private String nom;
 
+    @NotBlank
+    private String prenom;
+
+    @NotBlank
+    private String adresse;
+
+    @NotBlank
     private String telephone;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String mdp;
 }

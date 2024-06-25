@@ -57,7 +57,7 @@ public class EleveController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorize("hasRole('Admin') or hasRole('Prof') or hasRole('Parent')")
+//    @PreAuthorize("hasRole('Admin') or hasRole('Prof') or hasRole('Parent')")
     @PostMapping
     public ResponseEntity<Eleve> postEleve(@Valid @RequestBody CreateEleve eleve){
         Eleve eleveACreer = service.createEleve(eleve);

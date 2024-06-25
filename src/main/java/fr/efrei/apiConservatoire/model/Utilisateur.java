@@ -1,6 +1,8 @@
 package fr.efrei.apiConservatoire.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.efrei.apiConservatoire.constants.Role;
+import fr.efrei.apiConservatoire.security.CustomAuthorityDeserializer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,21 +37,23 @@ public class Utilisateur implements UserDetails {
     @Column(nullable = false, length = 35)
     private String adresse;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, unique = true, length = 20)
     private String telephone;
 
-    @Column(nullable = false, length = 35)
+    @Column(nullable = false, unique = true, length = 35)
     private String email;
 
-    @Column(nullable = false, length = 35)
+    @Column(nullable = false, length = 256)
     private String mdp;
 
     @Column(nullable = true)
     private String description_prof;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     public Collection<? extends GrantedAuthority> getAuthorities(){
         Set<Role> roles = Set.of(role);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

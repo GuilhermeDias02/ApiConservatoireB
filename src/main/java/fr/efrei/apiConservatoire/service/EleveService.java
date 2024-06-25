@@ -35,7 +35,7 @@ public class EleveService {
 
     public Eleve createEleve(CreateEleve eleve){
         Eleve eleveACreer = new Eleve(
-                eleve.getMom(),
+                eleve.getNom(),
                 eleve.getPrenom(),
                 eleve.getDate_naissance(),
                 eleve.isSoi_meme(),

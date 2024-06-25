@@ -38,6 +38,10 @@ public class Eleve {
     @JoinColumn(nullable = false)
     private Utilisateur utilisateur;
 
+    @ManyToOne
+    @JoinColumn(nullable = true)
+    private Classe classe;
+
     public Eleve(String nom, String prenom, Date date_naissance, boolean soi_meme, boolean demande_inscription, Utilisateur utilisateur){
         this.mom = nom;
         this.prenom = prenom;

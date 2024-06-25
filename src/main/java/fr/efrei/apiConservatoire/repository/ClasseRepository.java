@@ -15,7 +15,7 @@ public interface ClasseRepository extends JpaRepository<Classe, String> {
     List<Classe> findAll();
 
     Optional<Classe> findOneByUuid(String uuid);
-    Optional<Classe> findOneByEleve(Eleve eleve);
+//    Optional<Classe> findOneByEleve(Eleve eleve);
 
     List<Classe> findAllByInstrument(Instrument instrument);
     List<Classe> findAllByNiveau(Niveau niveau);
